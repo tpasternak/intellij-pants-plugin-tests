@@ -3,14 +3,12 @@ package com.twitter.intellij.pants
 import java.nio.file.Path
 
 import com.twitter.intellij.pants.OpenProjectTestFixture.TestData
-import com.twitter.intellij.pants.protocol.PythonFacet
+import com.twitter.intellij.pants.protocol.{PantsProjectSettingsChangeRequest, PythonFacet}
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.virtuslab.ideprobe.ConfigFormat
-import org.virtuslab.ideprobe.RunningIntelliJFixture
+import org.virtuslab.ideprobe.{ConfigFormat, IntelliJFixture, RunningIntelliJFixture, Shell}
 import org.virtuslab.ideprobe.junit4.RunningIntelliJPerSuite
-import org.virtuslab.ideprobe.Shell
 import org.virtuslab.ideprobe.protocol.FileRef
 import org.virtuslab.ideprobe.protocol.ModuleRef
 import org.virtuslab.ideprobe.protocol.ProjectRef
@@ -146,4 +144,27 @@ object OpenProjectTestPants extends OpenProjectTestFixture {
 
 object OpenProjectTestBsp extends OpenProjectTestFixture {
   override def openProject(): ProjectRef = openProjectWithBsp(intelliJ)
+}
+
+
+
+
+class PantsFastpassTest extends PantsTestSuite with ConfigFormat {
+//  override def intelliJ: RunningIntelliJFixture = PantsFastpassTest.intelliJ
+
+  // TODO add to common OpenProjectTest when it works with pants
+  @Test def successfullyOpen(): Unit = {
+    val settings = PantsProjectSettingsChangeRequest()
+    fixtureFromConfig().withPlugin(pantsProbePlugin).run{
+      intelliJ => intelliJ.probe.importProject(intelliJ.workspace.resolve("examples/src/java/org/pantsbuild/example/hello/greet"), settings)
+        assert(true)
+    }
+
+  }
+}
+
+object PantsFastpassTest extends PantsTestSuite {
+
+
+
 }

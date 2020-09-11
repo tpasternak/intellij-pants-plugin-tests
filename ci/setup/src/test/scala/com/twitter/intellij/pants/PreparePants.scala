@@ -4,6 +4,7 @@ import org.junit.Test
 import org.virtuslab.ideprobe.Config
 import org.virtuslab.ideprobe.Extensions._
 import org.virtuslab.ideprobe.IntelliJFixture
+import org.virtuslab.ideprobe.dependencies.Plugin
 
 class PreparePants extends PantsTestSuite {
   @Test def run(): Unit = {

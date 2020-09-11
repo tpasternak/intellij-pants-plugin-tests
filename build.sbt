@@ -48,6 +48,7 @@ lazy val pantsProbePlugin = ideaPlugin("probePlugin", id = "pantsProbePlugin")
       file.getName == "pantsProbePlugin.jar"
     },
     intellijPlugins += "com.intellij.plugins.pants:1.15.1.42d84c497b639ef81ebdae8328401e3966588b2c:bleedingedge".toPlugin,
+    intellijPlugins += "org.intellij.scala:2020.2.795:nightly".toPlugin,
     name := "pants-probe-plugin"
   )
 

@@ -14,6 +14,7 @@ import com.twitter.intellij.pants.service.project.wizard.PantsProjectImportProvi
 import com.twitter.intellij.pants.settings.ImportFromPantsControl
 import com.twitter.intellij.pants.settings.PantsProjectSettingsControl
 import javax.swing.JSpinner
+import org.jetbrains.bsp.project.importing.BspProjectImportProvider
 import org.virtuslab.ideprobe.handlers.IntelliJApi
 import org.virtuslab.ideprobe.handlers.Projects
 import org.virtuslab.ideprobe.protocol.ProjectRef
@@ -27,7 +28,7 @@ object PantsImport extends IntelliJApi {
     Projects.importFromSources(
       path, {
         case step: ImportChooserStep =>
-          selectPantsImportModel(step)
+          selectBspImportModel(step)
         case step: SelectExternalProjectStep =>
           configurePantsSettings(step, settings)
       }
@@ -41,6 +42,17 @@ object PantsImport extends IntelliJApi {
     val providersList = step.field[JBList[ProjectImportProvider]]("list")
     val pants = providersList.items
       .collectFirst { case p: PantsProjectImportProvider => p }
+      .getOrElse(error(s"Could not find pants import provider. Available providers are ${providersList.items}"))
+    providersList.setSelectedValue(pants, false)
+  }
+
+  private def selectBspImportModel(step: ImportChooserStep): Unit = {
+    val importCheckbox = step.field[JBRadioButton]("importFrom")
+    importCheckbox.setSelected(true)
+
+    val providersList = step.field[JBList[ProjectImportProvider]]("list")
+    val pants = providersList.items
+      .collectFirst { case p: BspProjectImportProvider => p }
       .getOrElse(error(s"Could not find pants import provider. Available providers are ${providersList.items}"))
     providersList.setSelectedValue(pants, false)
   }
